@@ -25,7 +25,4 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         fontSize: 20,
     },
-    container: {
-        paddingHorizontal: 20,
-    },
 })

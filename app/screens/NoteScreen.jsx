@@ -3,13 +3,14 @@
 ========================================*/
 import { useEffect, useState } from "react"
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
+import { RoundIconBtn } from "../components/RoundIconBtn"
 import { SearchBar } from "../components/SearchBar"
 import colors from "../misc/colors"
 /*========================================
         Import Components
 ========================================*/
 
-export const NoteScreen = ({user}) => {
+export const NoteScreen = ({ user }) => {
 
     const [greet, setGreet] = useState(greet)
 
@@ -26,22 +27,48 @@ export const NoteScreen = ({user}) => {
 
     useEffect(() => {
         findGreet()
-    },[])
+    }, [])
 
     return (
         <>
-            <StatusBar barStyle="dark-content" backgroundColor={colors.LIGHT}/>
-            <View>
+            <StatusBar barStyle="dark-content" backgroundColor={colors.LIGHT} />
+            <View style={styles.container}>
                 <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
-                <SearchBar containerStyle={{marginVertical: 15}}/>
+                <SearchBar containerStyle={{ marginVertical: 15 }} />
+                <View style={[ StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
+                    <Text style={styles.emptyHeader}>Add Notes</Text>
+                    <RoundIconBtn antIconName="plus" style={styles.addBtn}/>
+                </View>
             </View>
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 20,
+        flex: 1,
+
+    },
     header: {
         fontSize: 25,
         fontWeight: "bold",
+    },
+    emptyHeader: {
+        fontSize: 30,
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        opacity: 0.2,
+    },
+    emptyHeaderContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: -1,
+    },
+    addBtn: {
+        position: "absolute",
+        right: 15,
+        bottom: 50,
     }
 })
