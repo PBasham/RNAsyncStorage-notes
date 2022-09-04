@@ -3,6 +3,8 @@
 ========================================*/
 import { useState } from "react"
 import { StyleSheet, Text, TextInput, View, StatusBar, Dimensions } from 'react-native'
+// AsyncStorage!!! WooHoo!!
+import AsyncStorage from "@react-native-async-storage/async-storage"
 /*========================================
 Import Styling / Misc
 ========================================*/
@@ -14,11 +16,14 @@ import { RoundIconBtn } from "../components/RoundIconBtn"
 
 export const Intro = () => {
 
-    const [user, setUser] = useState("") // State to keep track of the current user from the input field
+    const [name, setName] = useState("") // State to keep track of the current user from the input field
 
-    const handleOnChangeText = text => setUser(text) // updates the username as it is being typed.
+    const handleOnChangeText = text => setName(text) // updates the username as it is being typed.
 
-
+    const handleSubmit = async () => {
+        const user = { name: name}
+        await AsyncStorage.setItem("user", JSON.stringify(user))
+    }
 
     return (
         <>
@@ -26,12 +31,12 @@ export const Intro = () => {
             <View style={styles.container}>
                 <Text style={styles.inputTitle} >Enter Your Name to Contunue</Text>
                 <TextInput
-                    value={user}
+                    value={name}
                     onChangeText={handleOnChangeText}
                     placeholder="Enter Name"
                     style={styles.textInput}
                 />
-                <RoundIconBtn antIconName="arrowright" />
+                {name.trim().length >= 3 ? <RoundIconBtn antIconName="arrowright" onPress={handleSubmit}/> : null}
             </View>
         </>
     )
@@ -53,6 +58,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     textInput: {
+        marginBottom: 15,
         paddingLeft: 15,
         width,
         height: 50,
