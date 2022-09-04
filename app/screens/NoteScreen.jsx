@@ -3,7 +3,8 @@
 ========================================*/
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useEffect, useState } from "react"
-import { Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { FlatList, Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Note } from "../components/Note"
 /*========================================
 Import Components
 ========================================*/
@@ -35,8 +36,8 @@ export const NoteScreen = ({ user }) => {
     }
 
     const handleOnSubmit = async (title, desc) => {
-        const note = {id: Date.now(), title, desc, time: Date.now(), }
-        const updatedNotes = [...notes, note] 
+        const note = { id: Date.now(), title, desc, time: Date.now(), }
+        const updatedNotes = [...notes, note]
         setNotes(updatedNotes)
         await AsyncStorage.setItem("notes", JSON.stringify(updatedNotes))
     }
@@ -45,7 +46,7 @@ export const NoteScreen = ({ user }) => {
         const result = await AsyncStorage.getItem("notes")
         if (result !== null) setNotes(JSON.parse(result))
     }
-    
+
     useEffect(() => {
         findNotes()
         findGreet()
@@ -58,20 +59,30 @@ export const NoteScreen = ({ user }) => {
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor={colors.LIGHT} />
+
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
                     <SearchBar containerStyle={{ marginVertical: 15 }} />
+                    {/* Display Note list using FlatList */}
+                    <FlatList
+                        data={notes}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => <Note item={item} />}
+                    />
+                    {!notes.length ? 
                     <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
                         <Text style={styles.emptyHeader}>Add Notes</Text>
-                        <RoundIconBtn
-                            onPress={() => setModalVisable(true)}
-                            antIconName="plus"
-                            style={styles.addBtn}
-                        />
+
                     </View>
+                    : null}
                 </View>
             </TouchableWithoutFeedback>
+            <RoundIconBtn
+                onPress={() => setModalVisable(true)}
+                antIconName="plus"
+                style={styles.addBtn}
+            />
             <NoteInputModal
                 visible={modalVisable}
                 onClose={() => setModalVisable(false)}
