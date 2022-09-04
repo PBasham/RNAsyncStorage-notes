@@ -20,7 +20,7 @@ export const NoteDetail = (props) => {
     const formatDate = ms => {
         const date = new Date(ms)
         const day = date.getDate()
-        const month = date.getMonth()
+        const month = date.getMonth() + 1
         const year = date.getFullYear()
         const hrs = date.getHours()
         const min = date.getMinutes()
@@ -32,21 +32,25 @@ export const NoteDetail = (props) => {
 
     // Return for component starts here.
     return (
-        <ScrollView contentContainerStyle={[styles.container, { paddingTop: headerHeight }]}>
-            <Text style={styles.time} >{`Created at ${formatDate(note.time)}`}</Text>
-            <Text style={styles.title} >{note.title}</Text>
-            <Text style={styles.desc} >{note.desc}</Text>
-
+        <>
+            <ScrollView contentContainerStyle={[styles.container, { paddingTop: headerHeight }]}>
+                <Text style={styles.time} >{`Created at ${formatDate(note.time)}`}</Text>
+                <Text style={styles.title} >{note.title}</Text>
+                <Text style={styles.desc} >{note.desc}</Text>
+            </ScrollView>
             <View style={styles.btnContainer}>
                 <RoundIconBtn antIconName="delete" style={{
                     backgroundColor: colors.ERROR,
                     marginBottom: 15,
                 }}
-                onPress={() => console.log("deleting note")}
+                    onPress={() => console.log("deleting note")}
                 />
-                <RoundIconBtn antIconName="edit" />
+                <RoundIconBtn
+                    antIconName="edit"
+                    onPress={() => console.log("editing note")}
+                />
             </View>
-        </ScrollView>
+        </>
     )
 }
 
@@ -55,7 +59,7 @@ export const NoteDetail = (props) => {
 ========================================*/
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         paddingHorizontal: 15,
     },
     title: {
