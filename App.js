@@ -9,6 +9,7 @@ import { StyleSheet, Text, View } from 'react-native';
         Import Screens / Components
 ========================================*/
 import { Intro } from "./app/screens/Intro";
+import { NoteScreen } from "./app/screens/NoteScreen";
 
 
 export default function App() {
@@ -22,7 +23,8 @@ export default function App() {
         findUser()
     }, [])
 
-    return <Intro />
+    // return <Intro />
+    return <NoteScreen />
 }
 
 const styles = StyleSheet.create({
