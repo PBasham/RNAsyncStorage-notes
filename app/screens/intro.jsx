@@ -4,9 +4,13 @@
 import { useState } from "react"
 import { StyleSheet, Text, TextInput, View, StatusBar, Dimensions } from 'react-native'
 /*========================================
-        Import Styling / Misc
+Import Styling / Misc
 ========================================*/
 import colors from "../misc/colors"
+/*========================================
+        Import Components
+========================================*/
+import { RoundIconBtn } from "../components/RoundIconBtn"
 
 export const Intro = () => {
 
@@ -27,6 +31,7 @@ export const Intro = () => {
                     placeholder="Enter Name"
                     style={styles.textInput}
                 />
+                <RoundIconBtn antIconName="arrowright" />
             </View>
         </>
     )

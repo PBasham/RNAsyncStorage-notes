@@ -9,10 +9,20 @@ import { AntDesign } from "@expo/vector-icons" // Import Ant Icons fomr vector-i
 import colors from "../misc/colors"
 
 
-export const RoundIconBtn = ({antIconName, size, color}) => {
-  return <AntDesign name={antIconName} size={size || 24} color={color || colors.LIGHT} />
+export const RoundIconBtn = ({ antIconName, size, color, style }) => {
+    return <AntDesign
+        name={antIconName}
+        size={size || 24}
+        color={color || colors.LIGHT}
+        style={[styles.icon, {...style}]}
+    />
 }
 
 const styles = StyleSheet.create({
-
+    icon: {
+        backgroundColor: colors.PRIMARY,
+        padding: 15,
+        borderRadius: 50,
+        elevation: 5,
+    }
 })
