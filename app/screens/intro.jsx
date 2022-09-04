@@ -48,7 +48,7 @@ export const Intro = ({onFinish}) => {
         Variables
 ========================================*/
 const width = Dimensions.get("window").width - 50
-console.log("width: ", width)
+// console.log("width: ", width)
 /*========================================
         StyleSheet
 ========================================*/

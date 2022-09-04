@@ -1,6 +1,7 @@
 /*========================================
         Import Dependencies
 ========================================*/
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useEffect, useState } from "react"
 import { Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 /*========================================
@@ -20,6 +21,8 @@ export const NoteScreen = ({ user }) => {
 
     const [modalVisable, setModalVisable] = useState(false)
 
+    const [notes, setNotes] = useState([])
+
     const findGreet = () => {
         const hrs = new Date().getHours()
         if (hrs === 0 || hrs < 12) {
@@ -31,11 +34,20 @@ export const NoteScreen = ({ user }) => {
         }
     }
 
-    const handleOnSubmit = (title, desc) => {
-        console.log(title, desc)
+    const handleOnSubmit = async (title, desc) => {
+        const note = {id: Date.now(), title, desc, time: Date.now(), }
+        const updatedNotes = [...notes, note] 
+        setNotes(updatedNotes)
+        await AsyncStorage.setItem("notes", JSON.stringify(updatedNotes))
     }
 
+    const findNotes = async () => {
+        const result = await AsyncStorage.getItem("notes")
+        if (result !== null) setNotes(JSON.parse(result))
+    }
+    
     useEffect(() => {
+        findNotes()
         findGreet()
     }, [])
 
