@@ -14,7 +14,7 @@ import colors from "../misc/colors"
 ========================================*/
 import { RoundIconBtn } from "../components/RoundIconBtn"
 
-export const Intro = () => {
+export const Intro = ({onFinish}) => {
 
     const [name, setName] = useState("") // State to keep track of the current user from the input field
 
@@ -23,6 +23,7 @@ export const Intro = () => {
     const handleSubmit = async () => {
         const user = { name: name}
         await AsyncStorage.setItem("user", JSON.stringify(user))
+        if(onFinish) onFinish()
     }
 
     return (

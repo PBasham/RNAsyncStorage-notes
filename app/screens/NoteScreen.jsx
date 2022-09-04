@@ -3,12 +3,16 @@
 ========================================*/
 import { useEffect, useState } from "react"
 import { StatusBar, StyleSheet, Text, View } from 'react-native'
+/*========================================
+Import Components
+========================================*/
+import { NoteInputModal } from "../components/NoteInputModal"
 import { RoundIconBtn } from "../components/RoundIconBtn"
 import { SearchBar } from "../components/SearchBar"
-import colors from "../misc/colors"
 /*========================================
-        Import Components
+        Import Styles
 ========================================*/
+import colors from "../misc/colors"
 
 export const NoteScreen = ({ user }) => {
 
@@ -37,9 +41,14 @@ export const NoteScreen = ({ user }) => {
                 <SearchBar containerStyle={{ marginVertical: 15 }} />
                 <View style={[ StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
                     <Text style={styles.emptyHeader}>Add Notes</Text>
-                    <RoundIconBtn antIconName="plus" style={styles.addBtn}/>
+                    <RoundIconBtn 
+                    onPress={() => console.log("opening modal")}
+                    antIconName="plus" 
+                    style={styles.addBtn}
+                    />
                 </View>
             </View>
+            <NoteInputModal visible={true}/>
         </>
     )
 }
