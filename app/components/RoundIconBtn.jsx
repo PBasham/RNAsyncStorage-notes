@@ -10,13 +10,16 @@ import colors from "../misc/colors"
 
 
 export const RoundIconBtn = ({ antIconName, size, color, style, onPress }) => {
-    return <AntDesign
-        name={antIconName}
-        size={size || 24}
-        color={color || colors.LIGHT}
-        style={[styles.icon, {...style}]}
-        onPress={onPress}
-    />
+    return (<View
+        style={[styles.icon, { ...style }]}
+    >
+        <AntDesign
+            name={antIconName}
+            size={size || 24}
+            color={color || colors.LIGHT}
+            onPress={onPress}
+        />
+    </View>)
 }
 
 const styles = StyleSheet.create({
