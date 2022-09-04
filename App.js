@@ -1,10 +1,10 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from 'react-native';
+// AsyncStorage!! Woohoo!!
+import AsyncStorage from "@react-native-async-storage/async-storage";
 /*========================================
         Import Screens / Components
 ========================================*/
@@ -13,10 +13,10 @@ import { NoteScreen } from "./app/screens/NoteScreen";
 
 
 export default function App() {
-
+    const [user, setUser] = useState({})
     const findUser  = async () => {
         const result = await AsyncStorage.getItem("user")
-        console.log(result)
+        setUser(JSON.parse(result))
     }
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function App() {
     }, [])
 
     // return <Intro />
-    return <NoteScreen />
+    return <NoteScreen user={user}/>
 }
 
 const styles = StyleSheet.create({
