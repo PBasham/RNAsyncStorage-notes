@@ -17,12 +17,12 @@ export const SearchBar = ({containerStyle}) => {
 
 const styles = StyleSheet.create({
     searchBar: {
-
         paddingLeft: 15,
         borderWidth: 0.5,
         borderColor: colors.PRIMARY,
         height: 40,
         borderRadius: 40,
         fontSize: 20,
+        zIndex: 1,
     },
 })

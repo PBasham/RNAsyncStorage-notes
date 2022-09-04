@@ -63,7 +63,9 @@ export const NoteScreen = ({ user }) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
-                    <SearchBar containerStyle={{ marginVertical: 15 }} />
+                    {notes.length ?
+                        <SearchBar containerStyle={{ marginVertical: 15 }} />
+                        : null}
                     {/* Display Note list using FlatList */}
                     <FlatList
                         data={notes}
@@ -75,17 +77,18 @@ export const NoteScreen = ({ user }) => {
                         keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => <Note item={item} />}
                     />
-                    {!notes.length ? 
-                    <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
-                        <Text style={styles.emptyHeader}>Add Notes</Text>
-                    </View>
-                    : null}
+                    {!notes.length ?
+                        <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
+                            <Text style={styles.emptyHeader}>Add Notes</Text>
+                        </View>
+                        : null}
                 </View>
             </TouchableWithoutFeedback>
             <RoundIconBtn
                 onPress={() => setModalVisable(true)}
                 antIconName="plus"
                 style={styles.addBtn}
+                
             />
             <NoteInputModal
                 visible={modalVisable}
@@ -100,7 +103,6 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         flex: 1,
-        zIndex: 1
     },
     header: {
         fontSize: 25,
@@ -122,5 +124,6 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 15,
         bottom: 50,
+        zIndex: 1,
     }
 })
