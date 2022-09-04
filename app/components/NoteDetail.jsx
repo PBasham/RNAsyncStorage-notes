@@ -1,20 +1,64 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useHeaderHeight } from "@react-navigation/elements"
+import colors from "../misc/colors"
 
 export const NoteDetail = (props) => {
+
+    /*==== Variables ====*/
     const { note } = props.route.params
     const headerHeight = useHeaderHeight()
-  return (
-    <View style={[styles.container, {paddingTop: headerHeight}]}>
-      <Text>{ note.title }</Text>
-      <Text>{ note.desc }</Text>
-    </View>
-  )
+
+    /*==== useState ====*/
+
+    /*==== useEffect ====*/
+
+    /*==== Functions START ====*/
+    const formatDate = ms => {
+        const date = new Date(ms)
+        const day = date.getDate()
+        const month = date.getMonth()
+        const year = date.getFullYear()
+        const hrs = date.getHours()
+        const min = date.getMinutes()
+        const sec = date.getSeconds()
+
+        return `${day}/${month}/${year} - ${hrs}:${min}:${sec}`
+    }
+    /*==== Functions END ====*/
+
+    // Return for component starts here.
+    return (
+        <ScrollView contentContainerStyle={[styles.container, { paddingTop: headerHeight }]}>
+            <Text style={styles.time} >{`Created at ${formatDate(note.time)}`}</Text>
+            <Text style={styles.title} >{note.title}</Text>
+            <Text style={styles.desc} >{note.desc}</Text>
+        </ScrollView>
+    )
 }
 
+/*========================================
+        StyleSheet
+========================================*/
 const styles = StyleSheet.create({
-
+    container: {
+        // flex: 1,
+        paddingHorizontal: 15,
+    },
+    title: {
+        fontSize: 30,
+        color: colors.PRIMARY,
+        fontWeight: "bold",
+    },
+    desc: {
+        fontSize: 20,
+        opacity: 0.6,
+    },
+    time: {
+        textAlign: "right",
+        fontSize: 16,
+        opacity: 0.5,
+    }
 })
