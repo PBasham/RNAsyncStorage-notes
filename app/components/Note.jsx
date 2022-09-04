@@ -1,7 +1,8 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Dimensions } from 'react-native'
+import colors from "../misc/colors"
 /*========================================
         Import Styles
 ========================================*/
@@ -13,12 +14,24 @@ export const Note = ({item}) => {
 
   return (
     <View style={styles.container}>
-        <Text>{title}</Text>
-        <Text>{desc}</Text>
+        <Text style={styles.title} numberOfLines={2}>{title}</Text>
+        <Text numberOfLines={3}>{desc}</Text>
     </View>
   )
 }
 
+const width = Dimensions.get("window").width - 40
+
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        backgroundColor: colors.PRIMARY,
+        width: width / 2 - 10,
+        padding: 8,
+        borderRadius: 10,
+    },
+    title: {
+        fontWeight: "bold",
+        fontSize: 16,
+        color: colors.LIGHT,
+    },
 })

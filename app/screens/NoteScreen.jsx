@@ -67,13 +67,17 @@ export const NoteScreen = ({ user }) => {
                     {/* Display Note list using FlatList */}
                     <FlatList
                         data={notes}
+                        numColumns={2}
+                        columnWrapperStyle={{
+                            justifyContent: "space-between",
+                            marginBottom: 15,
+                        }}
                         keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => <Note item={item} />}
                     />
                     {!notes.length ? 
                     <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
                         <Text style={styles.emptyHeader}>Add Notes</Text>
-
                     </View>
                     : null}
                 </View>
