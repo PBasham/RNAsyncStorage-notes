@@ -16,7 +16,7 @@ import { SearchBar } from "../components/SearchBar"
 ========================================*/
 import colors from "../misc/colors"
 
-export const NoteScreen = ({ user }) => {
+export const NoteScreen = ({ user, navigation }) => {
 
     const [greet, setGreet] = useState(greet)
 
@@ -53,7 +53,11 @@ export const NoteScreen = ({ user }) => {
     }, [])
 
 
-
+    /* Functions */
+    const openNote = (note) => {
+        navigation.navigate("NoteDetail", { note })
+    }
+    /* END Functions */
 
 
     return (
@@ -75,7 +79,11 @@ export const NoteScreen = ({ user }) => {
                             marginBottom: 15,
                         }}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => <Note onPress={() => console.log("pressing")} item={item} />}
+                        renderItem={({ item }) => <Note
+                            onPress={() => openNote(item)}
+                            item={item}
+                        />
+                        }
                     />
                     {!notes.length ?
                         <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
@@ -88,7 +96,7 @@ export const NoteScreen = ({ user }) => {
                 onPress={() => setModalVisable(true)}
                 antIconName="plus"
                 style={styles.addBtn}
-                
+
             />
             <NoteInputModal
                 visible={modalVisable}

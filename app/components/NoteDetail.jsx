@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export const NoteDetail = () => {
+export const NoteDetail = (props) => {
+    const { note } = props.route.params
+
   return (
     <View>
-      <Text>Note Detail</Text>
+      <Text>{ note.title }</Text>
+      <Text>{ note.desc }</Text>
     </View>
   )
 }
