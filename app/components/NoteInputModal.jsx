@@ -17,8 +17,9 @@ import { dismiss } from "react-native/Libraries/LogBox/Data/LogBoxData"
         Import Styles
 ========================================*/
 import colors from "../misc/colors"
+import { RoundIconBtn } from "./RoundIconBtn"
 
-export const NoteInputModal = ({ visible }) => {
+export const NoteInputModal = ({ visible, onClose, onSubmit }) => {
 
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
@@ -28,17 +29,31 @@ export const NoteInputModal = ({ visible }) => {
 
 
     /* Functions */
+    // Simply closes the keyboard
     const handleModalClose = () => {
         Keyboard.dismiss()
     }
-
+    // updates the title / text on change.
     const handleOnChangeText = (text, valueFor) => {
         if (valueFor === "title") setTitle(text)
         if (valueFor === "desc") setDesc(text)
     }
-    /* END Functions */
 
-    console.log(title, desc);
+    const handleSubmit = () => {
+        if (!title.trim() && !desc.trim()) return onClose()
+        onSubmit(title, desc)
+        setTitle("")
+        setDesc("")
+        onClose()
+    }
+
+    const closeModal = () => {
+        setTitle("")
+        setDesc("")
+        onClose()
+    }
+
+    /* END Functions */
 
     return (
         <>
@@ -58,6 +73,19 @@ export const NoteInputModal = ({ visible }) => {
                         placeholder="Note"
                         style={[styles.input, styles.desc]}
                     />
+                    <View style={styles.btnContainer}>
+                        <RoundIconBtn
+                            antIconName="check"
+                            size={15}
+                            onPress={handleSubmit}
+                        />
+                        { title.trim() || desc.trim() ? <RoundIconBtn
+                            antIconName="close"
+                            size={15}
+                            style={{ marginLeft: 15 }}
+                            onPress={closeModal}
+                        /> : null}
+                    </View>
                 </View>
                 <TouchableWithoutFeedback onPress={handleModalClose}>
                     <View style={[styles.modalBG, StyleSheet.absoluteFillObject]} />
@@ -89,5 +117,10 @@ const styles = StyleSheet.create({
     modalBG: {
         flex: 1,
         zIndex: -1,
+    },
+    btnContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        paddingVertical: 15,
     }
 })

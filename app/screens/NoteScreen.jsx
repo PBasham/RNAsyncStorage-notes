@@ -2,7 +2,7 @@
         Import Dependencies
 ========================================*/
 import { useEffect, useState } from "react"
-import { StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Keyboard, StatusBar, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 /*========================================
 Import Components
 ========================================*/
@@ -18,6 +18,8 @@ export const NoteScreen = ({ user }) => {
 
     const [greet, setGreet] = useState(greet)
 
+    const [modalVisable, setModalVisable] = useState(false)
+
     const findGreet = () => {
         const hrs = new Date().getHours()
         if (hrs === 0 || hrs < 12) {
@@ -29,26 +31,40 @@ export const NoteScreen = ({ user }) => {
         }
     }
 
+    const handleOnSubmit = (title, desc) => {
+        console.log(title, desc)
+    }
+
     useEffect(() => {
         findGreet()
     }, [])
 
+
+
+
+
     return (
         <>
             <StatusBar barStyle="dark-content" backgroundColor={colors.LIGHT} />
-            <View style={styles.container}>
-                <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
-                <SearchBar containerStyle={{ marginVertical: 15 }} />
-                <View style={[ StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
-                    <Text style={styles.emptyHeader}>Add Notes</Text>
-                    <RoundIconBtn 
-                    onPress={() => console.log("opening modal")}
-                    antIconName="plus" 
-                    style={styles.addBtn}
-                    />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
+                    <SearchBar containerStyle={{ marginVertical: 15 }} />
+                    <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
+                        <Text style={styles.emptyHeader}>Add Notes</Text>
+                        <RoundIconBtn
+                            onPress={() => setModalVisable(true)}
+                            antIconName="plus"
+                            style={styles.addBtn}
+                        />
+                    </View>
                 </View>
-            </View>
-            <NoteInputModal visible={true}/>
+            </TouchableWithoutFeedback>
+            <NoteInputModal
+                visible={modalVisable}
+                onClose={() => setModalVisable(false)}
+                onSubmit={handleOnSubmit}
+            />
         </>
     )
 }
@@ -57,7 +73,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         flex: 1,
-
+        zIndex: 1
     },
     header: {
         fontSize: 25,
