@@ -12,13 +12,19 @@ import { AntDesign } from "@expo/vector-icons" // Import Ant Icons fomr vector-i
 ========================================*/
 import colors from "../misc/colors"
 
-export const SearchBar = ({containerStyle, value, onChangeText, onClear}) => {
-  return (
-    <View style={[styles.container, {...containerStyle}]}>
-        <TextInput value={value} onChangeText={onChangeText} style={styles.searchBar} placeholder="Search here..." />
-        {value ? <AntDesign name="close" size={20} color={colors.PRIMARY} onPress={onClear} /> : null}
-    </View>
-  )
+export const SearchBar = ({ containerStyle, value, onChangeText, onClear }) => {
+    return (
+        <View style={[styles.container, { ...containerStyle }]}>
+            <TextInput value={value} onChangeText={onChangeText} style={styles.searchBar} placeholder="Search here..." />
+            {value ? <AntDesign
+                name="close"
+                size={20}
+                color={colors.PRIMARY}
+                onPress={onClear}
+                style={styles.clearIcon}
+            /> : null}
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -31,4 +37,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         zIndex: 1,
     },
+    container: {
+        justifyContent: "center",
+    },
+    clearIcon: {
+        position: "absolute",
+        right: 10,
+    }
 })
