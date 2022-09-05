@@ -2,15 +2,21 @@
         Import Dependencies
 ========================================*/
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import colors from "../misc/colors"
+import { AntDesign } from "@expo/vector-icons" // Import Ant Icons fomr vector-icons
 /*========================================
         Import Components
 ========================================*/
 
-export const SearchBar = ({containerStyle}) => {
+/*========================================
+        Import Styles
+========================================*/
+import colors from "../misc/colors"
+
+export const SearchBar = ({containerStyle, value, onChangeText, onClear}) => {
   return (
     <View style={[styles.container, {...containerStyle}]}>
-        <TextInput style={styles.searchBar} placeholder="Search here..." />
+        <TextInput value={value} onChangeText={onChangeText} style={styles.searchBar} placeholder="Search here..." />
+        {value ? <AntDesign name="close" size={20} color={colors.PRIMARY} onPress={onClear} /> : null}
     </View>
   )
 }

@@ -26,6 +26,8 @@ export const NoteScreen = ({ user, navigation }) => {
 
     const [modalVisable, setModalVisable] = useState(false)
     
+    const [searchQuery, setSearchQuery] = useState("")
+    
     /*==== useEffect ====*/
     useEffect(() => {
         findGreet()
@@ -51,10 +53,19 @@ export const NoteScreen = ({ user, navigation }) => {
         await AsyncStorage.setItem("notes", JSON.stringify(updatedNotes))
     }
 
-    
-
     const openNote = (note) => {
         navigation.navigate("NoteDetail", { note })
+    }
+    const handleOnSearchInput = (text) => {
+        setSearchQuery(text)
+        const filteredNotes = notes.filter(note => {
+            if (note.title.toLowerCase().includes(text.toLowerCase())){
+                return note
+            }
+        })
+        if(filteredNotes.length) {
+            setNotes([...filteredNotes])
+        }
     }
     /*==== Functions END ====*/
 
@@ -67,7 +78,7 @@ export const NoteScreen = ({ user, navigation }) => {
                 <View style={styles.container}>
                     <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
                     {notes.length ?
-                        <SearchBar containerStyle={{ marginVertical: 15 }} />
+                        <SearchBar value={searchQuery} onChangeText={handleOnSearchInput} containerStyle={{ marginVertical: 15 }} />
                         : null}
                     {/* Display Note list using FlatList */}
                     <FlatList
