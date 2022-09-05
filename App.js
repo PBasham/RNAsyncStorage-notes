@@ -14,6 +14,7 @@ import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { Intro } from "./app/screens/Intro";
 import { NoteScreen } from "./app/screens/NoteScreen";
 import { NoteDetail } from "./app/components/NoteDetail";
+import { NoteProvider } from "./app/contexts/NoteProvider";
 
 const Stack = createNativeStackNavigator()
 
@@ -31,16 +32,17 @@ export default function App() {
     }, [])
 
     // functions for rendering routes with props.
-    const renderNoteScreen = (props) => <NoteScreen {...props} user={user}/>
+    const renderNoteScreen = (props) => <NoteScreen {...props} user={user} />
 
     // return starts here
     if (!user.name) return <Intro onFinish={findUser} />
     return <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerTitle: "", headerTransparent: true}}>
-            <Stack.Screen component={renderNoteScreen} name="NoteScreen" />
-            <Stack.Screen component={NoteDetail} name="NoteDetail" />
-            {/* <NoteScreen user={user} /> */}
-        </Stack.Navigator>
+        <NoteProvider>
+            <Stack.Navigator screenOptions={{ headerTitle: "", headerTransparent: true }}>
+                <Stack.Screen component={renderNoteScreen} name="NoteScreen" />
+                <Stack.Screen component={NoteDetail} name="NoteDetail" />
+            </Stack.Navigator>
+        </NoteProvider>
     </NavigationContainer>
 }
 

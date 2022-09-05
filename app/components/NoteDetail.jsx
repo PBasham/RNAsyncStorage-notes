@@ -1,17 +1,25 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useHeaderHeight } from "@react-navigation/elements"
-import colors from "../misc/colors"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+/*========================================
+        Import Components
+========================================*/
 import { RoundIconBtn } from "./RoundIconBtn"
+import {useNotes} from "../contexts/NoteProvider"
+/*========================================
+        Import Styles
+========================================*/
+import colors from "../misc/colors"
 
 export const NoteDetail = (props) => {
 
     /*==== Variables ====*/
     const { note } = props.route.params
     const headerHeight = useHeaderHeight()
-
+    const {setNotes} = useNotes()
     /*==== useState ====*/
 
     /*==== useEffect ====*/
@@ -28,6 +36,32 @@ export const NoteDetail = (props) => {
 
         return `${day}/${month}/${year} - ${hrs}:${min}:${sec}`
     }
+
+    const deleteNote = async () => {
+        const result = await AsyncStorage.getItem("notes")
+        let notes = []
+        if (result !== null) notes = JSON.parse(result)
+        const newNotes = notes.filter(n => n.id !== note.id)
+        setNotes(newNotes)
+        await AsyncStorage.setItem("notes", JSON.stringify(newNotes))
+        props.navigation.goBack()
+    }
+    
+    const displayDeleteAlert = () => {
+        Alert.alert(`Are You Sure!`, `This action will delete your not permanently!`, [
+            {
+                text: "Delete",
+                onPress: deleteNote,
+            },
+            {
+                text: "No Thanks",
+                onPress: () => {console.log("not thanks");}
+            },
+        ], {
+            cancelable: true,
+        })
+    }
+
     /*==== Functions END ====*/
 
     // Return for component starts here.
@@ -43,7 +77,7 @@ export const NoteDetail = (props) => {
                     backgroundColor: colors.ERROR,
                     marginBottom: 15,
                 }}
-                    onPress={() => console.log("deleting note")}
+                    onPress={displayDeleteAlert}
                 />
                 <RoundIconBtn
                     antIconName="edit"

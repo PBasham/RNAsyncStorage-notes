@@ -11,6 +11,7 @@ Import Components
 import { NoteInputModal } from "../components/NoteInputModal"
 import { RoundIconBtn } from "../components/RoundIconBtn"
 import { SearchBar } from "../components/SearchBar"
+import { useNotes } from "../contexts/NoteProvider"
 /*========================================
         Import Styles
 ========================================*/
@@ -18,11 +19,19 @@ import colors from "../misc/colors"
 
 export const NoteScreen = ({ user, navigation }) => {
 
+    /*==== Variables ====*/
+    const {notes, setNotes} = useNotes()
+    /*==== useState ====*/
     const [greet, setGreet] = useState(greet)
 
     const [modalVisable, setModalVisable] = useState(false)
-
-    const [notes, setNotes] = useState([])
+    
+    /*==== useEffect ====*/
+    useEffect(() => {
+        findGreet()
+    }, [])
+    
+    /*==== Functions START ====*/
 
     const findGreet = () => {
         const hrs = new Date().getHours()
@@ -42,22 +51,12 @@ export const NoteScreen = ({ user, navigation }) => {
         await AsyncStorage.setItem("notes", JSON.stringify(updatedNotes))
     }
 
-    const findNotes = async () => {
-        const result = await AsyncStorage.getItem("notes")
-        if (result !== null) setNotes(JSON.parse(result))
-    }
+    
 
-    useEffect(() => {
-        findNotes()
-        findGreet()
-    }, [])
-
-
-    /* Functions */
     const openNote = (note) => {
         navigation.navigate("NoteDetail", { note })
     }
-    /* END Functions */
+    /*==== Functions END ====*/
 
 
     return (
@@ -107,6 +106,10 @@ export const NoteScreen = ({ user, navigation }) => {
     )
 }
 
+
+/*========================================
+        StyleSheet
+========================================*/
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
