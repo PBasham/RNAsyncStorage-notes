@@ -1,7 +1,7 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { AntDesign } from "@expo/vector-icons" // Import Ant Icons fomr vector-icons
 /*========================================
         Import Colors
@@ -10,16 +10,16 @@ import colors from "../misc/colors"
 
 
 export const RoundIconBtn = ({ antIconName, size, color, style, onPress }) => {
-    return (<View
+    return (<Pressable
         style={[styles.icon, { ...style }]}
+        onPress={onPress}
     >
         <AntDesign
             name={antIconName}
             size={size || 24}
             color={color || colors.LIGHT}
-            onPress={onPress}
         />
-    </View>)
+    </Pressable>)
 }
 
 const styles = StyleSheet.create({

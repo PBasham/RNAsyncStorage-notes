@@ -1,6 +1,7 @@
 /*========================================
         Import Dependencies
 ========================================*/
+import { useState } from "react"
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useHeaderHeight } from "@react-navigation/elements"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -8,20 +9,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
         Import Components
 ========================================*/
 import { RoundIconBtn } from "./RoundIconBtn"
-import {useNotes} from "../contexts/NoteProvider"
+import { useNotes } from "../contexts/NoteProvider"
 /*========================================
         Import Styles
 ========================================*/
 import colors from "../misc/colors"
+import { NoteInputModal } from "./NoteInputModal"
 
 export const NoteDetail = (props) => {
 
     /*==== Variables ====*/
     const { note } = props.route.params
     const headerHeight = useHeaderHeight()
-    const {setNotes} = useNotes()
+    const { setNotes } = useNotes()
     /*==== useState ====*/
-
+    const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
     /*==== useEffect ====*/
 
     /*==== Functions START ====*/
@@ -46,7 +49,7 @@ export const NoteDetail = (props) => {
         await AsyncStorage.setItem("notes", JSON.stringify(newNotes))
         props.navigation.goBack()
     }
-    
+
     const displayDeleteAlert = () => {
         Alert.alert(`Are You Sure!`, `This action will delete your not permanently!`, [
             {
@@ -55,13 +58,22 @@ export const NoteDetail = (props) => {
             },
             {
                 text: "No Thanks",
-                onPress: () => {console.log("not thanks");}
+                onPress: () => { console.log("not thanks"); }
             },
         ], {
             cancelable: true,
         })
     }
 
+    const handleUpdate = () => {}
+
+    const handleOnClose = () => setShowModal(false)
+
+    const openEditModal = () => {
+        setIsEdit(true)
+        setShowModal(true)
+    }
+    
     /*==== Functions END ====*/
 
     // Return for component starts here.
@@ -81,9 +93,16 @@ export const NoteDetail = (props) => {
                 />
                 <RoundIconBtn
                     antIconName="edit"
-                    onPress={() => console.log("editing note")}
+                    onPress={openEditModal}
                 />
             </View>
+            <NoteInputModal
+                isEdit={isEdit}
+                note={note}
+                onClose={handleOnClose}
+                onSubmit={handleUpdate}
+                visible={showModal}
+            />
         </>
     )
 }

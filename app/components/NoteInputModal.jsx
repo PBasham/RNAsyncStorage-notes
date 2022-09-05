@@ -1,7 +1,7 @@
 /*========================================
         Import Dependencies
 ========================================*/
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     Modal,
     StatusBar,
@@ -19,16 +19,23 @@ import { dismiss } from "react-native/Libraries/LogBox/Data/LogBoxData"
 import colors from "../misc/colors"
 import { RoundIconBtn } from "./RoundIconBtn"
 
-export const NoteInputModal = ({ visible, onClose, onSubmit }) => {
+export const NoteInputModal = ({ visible, onClose, onSubmit, note, isEdit }) => {
 
+    /*=== useState === */
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
 
+    /*==== useEffect ====*/
+    useEffect(() => {
+        if (isEdit) {
+            setTitle(note.title)
+            setDesc(note.desc)
+        }
+    }, [isEdit])
 
 
 
-
-    /* Functions */
+    /*==== Functions ====*/
     // Simply closes the keyboard
     const handleModalClose = () => {
         Keyboard.dismiss()
@@ -41,15 +48,23 @@ export const NoteInputModal = ({ visible, onClose, onSubmit }) => {
 
     const handleSubmit = () => {
         if (!title.trim() && !desc.trim()) return onClose()
-        onSubmit(title, desc)
-        setTitle("")
-        setDesc("")
+        if(isEdit) {
+            // edit
+        } else {
+            onSubmit(title, desc)
+            setTitle("")
+            setDesc("")
+        }
         onClose()
     }
 
     const closeModal = () => {
-        setTitle("")
-        setDesc("")
+        if (isEdit) {
+
+        } else {
+            setTitle("")
+            setDesc("")
+        }
         onClose()
     }
 
