@@ -20,11 +20,14 @@ const Stack = createNativeStackNavigator()
 
 export default function App() {
     const [user, setUser] = useState({})
+    const [isAppFirstTimeOpen, setIsAppFirstTimeOpen] = useState(false)
     const findUser = async () => {
         const result = await AsyncStorage.getItem("user")
-        if (result !== null) {
-            setUser(JSON.parse(result))
-        }
+
+        if (result === null) return setIsAppFirstTimeOpen(true)
+
+        setUser(JSON.parse(result))
+        setIsAppFirstTimeOpen(false)
     }
 
     useEffect(() => {
@@ -35,7 +38,7 @@ export default function App() {
     const renderNoteScreen = (props) => <NoteScreen {...props} user={user} />
 
     // return starts here
-    if (!user.name) return <Intro onFinish={findUser} />
+    if (isAppFirstTimeOpen) return <Intro onFinish={findUser} />
     return <NavigationContainer>
         <NoteProvider>
             <Stack.Navigator screenOptions={{ headerTitle: "", headerTransparent: true }}>

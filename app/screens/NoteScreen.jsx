@@ -22,6 +22,7 @@ export const NoteScreen = ({ user, navigation }) => {
 
     /*==== Variables ====*/
     const { notes, setNotes, findNotes } = useNotes()
+
     /*==== useState ====*/
     const [greet, setGreet] = useState(greet)
     const [modalVisable, setModalVisable] = useState(false)
@@ -34,6 +35,8 @@ export const NoteScreen = ({ user, navigation }) => {
     }, [])
 
     /*==== Functions START ====*/
+ 
+    
 
     const findGreet = () => {
         const hrs = new Date().getHours()
@@ -80,6 +83,19 @@ export const NoteScreen = ({ user, navigation }) => {
         setResultNotFound(false)
         await findNotes()
     }
+
+    const reverseData = (data) => { 
+        return data.sort((a,b) => {
+            const aInt = parseInt(a.time)
+            const bInt = parseInt(b.time)
+            if (aInt < bInt) return 1
+            if (aInt === bInt) return 0
+            if (aInt > bInt) return -1
+        })
+    }
+    
+    const reverseNotes = reverseData(notes)
+
     /*==== Functions END ====*/
 
 
@@ -103,7 +119,7 @@ export const NoteScreen = ({ user, navigation }) => {
                         <NotFound />
                         :
                         < FlatList
-                            data={notes}
+                            data={reverseNotes}
                             numColumns={2}
                             columnWrapperStyle={{
                                 justifyContent: "space-between",
