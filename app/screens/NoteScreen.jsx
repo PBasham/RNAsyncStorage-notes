@@ -9,6 +9,7 @@ import { Note } from "../components/Note"
 Import Components
 ========================================*/
 import { NoteInputModal } from "../components/NoteInputModal"
+import { NotFound } from "../components/NotFound"
 import { RoundIconBtn } from "../components/RoundIconBtn"
 import { SearchBar } from "../components/SearchBar"
 import { useNotes } from "../contexts/NoteProvider"
@@ -20,19 +21,18 @@ import colors from "../misc/colors"
 export const NoteScreen = ({ user, navigation }) => {
 
     /*==== Variables ====*/
-    const {notes, setNotes} = useNotes()
+    const { notes, setNotes, findNotes } = useNotes()
     /*==== useState ====*/
     const [greet, setGreet] = useState(greet)
-
     const [modalVisable, setModalVisable] = useState(false)
-    
     const [searchQuery, setSearchQuery] = useState("")
-    
+    const [resultNotFound, setResultNotFound] = useState(false)
+
     /*==== useEffect ====*/
     useEffect(() => {
         findGreet()
     }, [])
-    
+
     /*==== Functions START ====*/
 
     const findGreet = () => {
@@ -56,16 +56,29 @@ export const NoteScreen = ({ user, navigation }) => {
     const openNote = (note) => {
         navigation.navigate("NoteDetail", { note })
     }
-    const handleOnSearchInput = (text) => {
+    const handleOnSearchInput = async (text) => {
         setSearchQuery(text)
+        if (!text.trim()) {
+            setSearchQuery("")
+            setResultNotFound(false)
+            return await findNotes()
+        }
         const filteredNotes = notes.filter(note => {
-            if (note.title.toLowerCase().includes(text.toLowerCase())){
+            if (note.title.toLowerCase().includes(text.toLowerCase())) {
                 return note
             }
         })
-        if(filteredNotes.length) {
+        if (filteredNotes.length) {
             setNotes([...filteredNotes])
+        } else {
+            setResultNotFound(true)
         }
+    }
+
+    const handleOnClear = async () => {
+        setSearchQuery("")
+        setResultNotFound(false)
+        await findNotes()
     }
     /*==== Functions END ====*/
 
@@ -78,23 +91,33 @@ export const NoteScreen = ({ user, navigation }) => {
                 <View style={styles.container}>
                     <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
                     {notes.length ?
-                        <SearchBar value={searchQuery} onChangeText={handleOnSearchInput} containerStyle={{ marginVertical: 15 }} />
-                        : null}
-                    {/* Display Note list using FlatList */}
-                    <FlatList
-                        data={notes}
-                        numColumns={2}
-                        columnWrapperStyle={{
-                            justifyContent: "space-between",
-                            marginBottom: 15,
-                        }}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => <Note
-                            onPress={() => openNote(item)}
-                            item={item}
+                        <SearchBar
+                            value={searchQuery}
+                            onChangeText={handleOnSearchInput}
+                            containerStyle={{ marginVertical: 15 }}
+                            onClear={handleOnClear}
                         />
-                        }
-                    />
+                        : null}
+
+                    {resultNotFound ?
+                        <NotFound />
+                        :
+                        < FlatList
+                            data={notes}
+                            numColumns={2}
+                            columnWrapperStyle={{
+                                justifyContent: "space-between",
+                                marginBottom: 15,
+                            }}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={({ item }) => <Note
+                                onPress={() => openNote(item)}
+                                item={item}
+                            />
+                            }
+                        />
+                    }
+
                     {!notes.length ?
                         <View style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
                             <Text style={styles.emptyHeader}>Add Notes</Text>
@@ -123,6 +146,7 @@ export const NoteScreen = ({ user, navigation }) => {
 ========================================*/
 const styles = StyleSheet.create({
     container: {
+        marginTop: 50,
         paddingHorizontal: 20,
         flex: 1,
     },

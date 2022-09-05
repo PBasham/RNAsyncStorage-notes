@@ -28,6 +28,9 @@ export const SearchBar = ({ containerStyle, value, onChangeText, onClear }) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        justifyContent: "center",
+    },
     searchBar: {
         paddingLeft: 15,
         borderWidth: 0.5,
@@ -37,11 +40,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         zIndex: 1,
     },
-    container: {
-        justifyContent: "center",
-    },
     clearIcon: {
         position: "absolute",
         right: 10,
+        zIndex: 1,
     }
 })
