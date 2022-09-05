@@ -49,7 +49,7 @@ export const NoteInputModal = ({ visible, onClose, onSubmit, note, isEdit }) => 
     const handleSubmit = () => {
         if (!title.trim() && !desc.trim()) return onClose()
         if(isEdit) {
-            // edit
+            onSubmit(title, desc, Date.now())
         } else {
             onSubmit(title, desc)
             setTitle("")

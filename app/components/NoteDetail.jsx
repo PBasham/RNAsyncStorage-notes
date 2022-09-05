@@ -19,12 +19,12 @@ import { NoteInputModal } from "./NoteInputModal"
 export const NoteDetail = (props) => {
 
     /*==== Variables ====*/
-    const { note } = props.route.params
     const headerHeight = useHeaderHeight()
     const { setNotes } = useNotes()
     /*==== useState ====*/
     const [showModal, setShowModal] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [note, setNote] = useState(props.route.params.note)
     /*==== useEffect ====*/
 
     /*==== Functions START ====*/
@@ -65,7 +65,25 @@ export const NoteDetail = (props) => {
         })
     }
 
-    const handleUpdate = () => {}
+    const handleUpdate = async (title, desc, time) => {
+        const result = await AsyncStorage.getItem("notes")
+        let notes = []
+        if (result !== null) notes = JSON.parse(result)
+
+        const newNotes = notes.filter(n => {
+            if (n.id === note.id) {
+                n.title = title
+                n.desc = desc
+                n.isUpdated = true
+                n.time = time
+
+                setNote(n)
+            }
+            return n
+        })
+        setNotes(newNotes)
+        await AsyncStorage.setItem("notes", JSON.stringify(newNotes))
+    }
 
     const handleOnClose = () => setShowModal(false)
 
@@ -73,14 +91,14 @@ export const NoteDetail = (props) => {
         setIsEdit(true)
         setShowModal(true)
     }
-    
+
     /*==== Functions END ====*/
 
     // Return for component starts here.
     return (
         <>
             <ScrollView contentContainerStyle={[styles.container, { paddingTop: headerHeight }]}>
-                <Text style={styles.time} >{`Created at ${formatDate(note.time)}`}</Text>
+                <Text style={styles.time} >{`${note.isUpdated ? "Updated" : "Created"} at ${formatDate(note.time)}`}</Text>
                 <Text style={styles.title} >{note.title}</Text>
                 <Text style={styles.desc} >{note.desc}</Text>
             </ScrollView>
